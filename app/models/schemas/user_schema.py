@@ -39,9 +39,7 @@ class UserCreate(BaseModel):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
-class UserToken(BaseModel):
-    role_id:int
-    client_id:int
+
 class UserUpdate(BaseModel):
     email:Optional[str] = None
     first_name:Optional[str] = None

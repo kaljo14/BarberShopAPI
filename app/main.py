@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .models import models
 from .database.database  import engine
-from .routers import user,role,auth,barber
+from .routers import user,role,auth,barber,location
 from .config.env_variables_config import settings
 
 
@@ -25,6 +25,7 @@ app.include_router(user.router)
 app.include_router(role.router)
 app.include_router(auth.router)
 app.include_router(barber.router)
+app.include_router(location.router)
 @app.get("/")
 def root():
     return {"message": "Hello World "}

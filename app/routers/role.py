@@ -13,7 +13,7 @@ router = APIRouter(
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=role_schema.RoleOut)
-def create_user(role: role_schema.RoleCreat, db: Session = Depends(get_db),user_model: user_schema.UserCreate =Depends(oauth2.get_current_user)):
+def create_role(role: role_schema.RoleCreat, db: Session = Depends(get_db),current_user: user_schema.UserCreate =Depends(oauth2.get_current_user)):
 
     new_role = models.Role(**role.dict())
     db.add(new_role)
@@ -24,11 +24,11 @@ def create_user(role: role_schema.RoleCreat, db: Session = Depends(get_db),user_
 
 
 @router.get('/', response_model=List[role_schema.RoleOut])
-def get_user( db: Session = Depends(get_db), user_model: user_schema.UserCreate =Depends(oauth2.get_current_user) ):
+def get_user( db: Session = Depends(get_db), current_user: user_schema.UserCreate =Depends(oauth2.get_current_user) ):
   
     roles = db.query(models.Role).all()
     # example for future use for the user model 
-    print(user_model.user_id)
+    print(current_user.user_id)
 
     if not roles:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,

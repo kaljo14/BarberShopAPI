@@ -11,7 +11,6 @@ def test_root():
 
 
 def test_create_barber(authorized_client):
-    
     test_barber_data = {
         "user_id": 1,
         "bio": "Test Barber Bio",
