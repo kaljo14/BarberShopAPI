@@ -38,14 +38,14 @@ class Location(Base):
     coordinates = Column(String(50))
 
 
-class Barbers(Base):
+class Barber(Base):
     __tablename__ = "barbers"
     barber_id = Column(Integer,primary_key= True,autoincrement=True)
     bio = Column(Text)
     specialization = Column(String)
     profile_picture =Column(String)
-    user_id = Column(Integer,ForeignKey('users.user_id'))
-    location_id = Column(Integer,ForeignKey('locations.location_id'))
+    user_id = Column(Integer,ForeignKey('users.user_id'),nullable=False,unique=True)
+    location_id = Column(Integer,ForeignKey('locations.location_id'),nullable=True)
     
 
     user = relationship("User")
@@ -90,7 +90,7 @@ class Appointment(Base):
     special_request = Column(Text)
     
     user = relationship("User")
-    barber = relationship("Barbers")
+    barber = relationship("Barber")
     service = relationship("Service")
     location = relationship("Location")
 
@@ -105,7 +105,7 @@ class Review(Base):
     created_at = Column(TIMESTAMP)
 
     user = relationship("User")
-    barber = relationship("Barbers")
+    barber = relationship("Barber")
 
 class Promotion(Base):
     __tablename__ = 'promotions'
@@ -141,4 +141,4 @@ class TimeSlot(Base):
     slot_time = Column(TIMESTAMP)
     availability = Column(String(20))
     
-    barbers = relationship("Barbers")
+    barbers = relationship("Barber")

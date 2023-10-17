@@ -1,8 +1,8 @@
 """fix relationship
 
-Revision ID: 98aca64f4784
+Revision ID: e8222725ee9b
 Revises: 
-Create Date: 2023-10-17 09:26:16.671261
+Create Date: 2023-10-17 12:44:00.707651
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '98aca64f4784'
+revision = 'e8222725ee9b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -65,6 +65,7 @@ def upgrade():
     op.create_table('users',
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('first_name', sa.String(), nullable=False),
+    sa.Column('phone_number', sa.String(), nullable=False),
     sa.Column('last_name', sa.String(), nullable=False),
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('password', sa.String(), nullable=False),
@@ -73,7 +74,8 @@ def upgrade():
     sa.Column('role_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['role_id'], ['roles.role_id'], ),
     sa.PrimaryKeyConstraint('user_id'),
-    sa.UniqueConstraint('email')
+    sa.UniqueConstraint('email'),
+    sa.UniqueConstraint('phone_number')
     )
     op.create_table('barbers',
     sa.Column('barber_id', sa.Integer(), autoincrement=True, nullable=False),
