@@ -16,6 +16,7 @@ class User(Base):
     __tablename__ = "users"
     user_id = Column(Integer, primary_key=True, nullable=False)
     first_name = Column(String,nullable=False)
+    phone_number =Column(String,nullable=False,unique=True)
     last_name =Column(String,nullable=False)
     email = Column(String, nullable=False, unique=True)
     password = Column(String, nullable=False)
@@ -89,7 +90,7 @@ class Appointment(Base):
     special_request = Column(Text)
     
     user = relationship("User")
-    barber = relationship("Barber")
+    barber = relationship("Barbers")
     service = relationship("Service")
     location = relationship("Location")
 
@@ -104,7 +105,7 @@ class Review(Base):
     created_at = Column(TIMESTAMP)
 
     user = relationship("User")
-    barber = relationship("Barber")
+    barber = relationship("Barbers")
 
 class Promotion(Base):
     __tablename__ = 'promotions'

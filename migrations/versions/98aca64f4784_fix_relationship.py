@@ -1,8 +1,8 @@
-"""test creation for all tables
+"""fix relationship
 
-Revision ID: 00b3f6ef8a8f
+Revision ID: 98aca64f4784
 Revises: 
-Create Date: 2023-10-16 17:32:15.923114
+Create Date: 2023-10-17 09:26:16.671261
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '00b3f6ef8a8f'
+revision = '98aca64f4784'
 down_revision = None
 branch_labels = None
 depends_on = None
