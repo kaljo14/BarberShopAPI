@@ -21,4 +21,8 @@ class BarberCreate(BaseModel):
     specialization:Optional[str] = None
     location_id:Optional[int] = None
     bio:Optional[str] = None
-    
+
+class BarberUpdate(BaseModel):
+    specialization:Optional[str] = None
+    location_id:Optional[int] = None
+    bio:Optional[str] = None

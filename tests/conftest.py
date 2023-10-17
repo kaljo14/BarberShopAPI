@@ -56,6 +56,16 @@ def test_user(client):
     new_user['password'] = user_data['password']
     return new_user
 
+
+@pytest.fixture
+def test_barber(authorized_client):
+    barber_data ={"user_id": 1}
+    res = authorized_client.post("/barbers/", json=barber_data)
+
+    assert res.status_code == 201
+    barber_data =res.json()
+    return barber_data
+
 # ----------------------- Autorization ----------------------
 @pytest.fixture
 def token(test_user):
@@ -73,38 +83,3 @@ def authorized_client(client, token):
 
 # ----------------------- Autorization ----------------------
 
-
-@pytest.fixture
-def test_roles(test_user, session, test_user2):
-    posts_data = [{
-        "title": "first title",
-        "content": "first content",
-        "owner_id": test_user['id']
-    }, {
-        "title": "2nd title",
-        "content": "2nd content",
-        "owner_id": test_user['id']
-    },
-        {
-        "title": "3rd title",
-        "content": "3rd content",
-        "owner_id": test_user['id']
-    }, {
-        "title": "3rd title",
-        "content": "3rd content",
-        "owner_id": test_user2['id']
-    }]
-
-    def create_post_model(post):
-        return models.Post(**post)
-
-    post_map = map(create_post_model, posts_data)
-    posts = list(post_map)
-
-    session.add_all(posts)
-    # session.add_all([models.Post(title="first title", content="first content", owner_id=test_user['id']),
-    #                 models.Post(title="2nd title", content="2nd content", owner_id=test_user['id']), models.Post(title="3rd title", content="3rd content", owner_id=test_user['id'])])
-    session.commit()
-
-    posts = session.query(models.Post).all()
-    return posts
