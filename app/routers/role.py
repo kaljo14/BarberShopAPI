@@ -13,7 +13,7 @@ router = APIRouter(
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=role_schema.RoleOut)
-def create_user(role: role_schema.RoleCreat, db: Session = Depends(get_db)):
+def create_user(role: role_schema.RoleCreat, db: Session = Depends(get_db),user_model: user_schema.UserCreate =Depends(oauth2.get_current_user)):
 
     new_role = models.Role(**role.dict())
     db.add(new_role)
@@ -35,3 +35,4 @@ def get_user( db: Session = Depends(get_db), user_model: user_schema.UserCreate 
                             detail=f"There are no roles defined")
 
     return roles
+    

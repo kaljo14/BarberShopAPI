@@ -15,8 +15,6 @@ router = APIRouter(
 def create_user(barber: BarberCreate, db: Session = Depends(get_db)):
 
    
-   
-     
     user_check = db.query(models.User).filter(models.User.user_id == barber.user_id).first()
     if user_check ==  None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"There is no user with id:{barber.user_id}")
