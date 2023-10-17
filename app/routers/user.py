@@ -2,8 +2,8 @@ from fastapi import FastAPI, Response, status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
 from ..models import models
 from ..models.schemas.user_schema import *
-from ..security import utils,oauth2
-from ..database.database  import get_db
+from ..security import utils, oauth2
+from ..database.database import get_db
 from typing import List
 
 router = APIRouter(
@@ -11,13 +11,13 @@ router = APIRouter(
     tags=['Users']
 )
 
+
 # /users/
 # /users
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=UserOut)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
-
     # hash the password - user.password
     hashed_password = utils.hash(user.password)
     user.password = hashed_password
@@ -30,14 +30,16 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
 
     return new_user
 
+
 @router.get('/', response_model=List[UserOut])
-def get_user( db: Session = Depends(get_db), ):
+def get_user(db: Session = Depends(get_db), ):
     users = db.query(models.User).all()
     if not users:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"There are no users defined")
 
     return users
+
 
 @router.get('/{user_id}', response_model=UserOut)
 def get_user(user_id: int, db: Session = Depends(get_db), ):
@@ -48,17 +50,18 @@ def get_user(user_id: int, db: Session = Depends(get_db), ):
 
     return user
 
+
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_user(id: int, db: Session = Depends(get_db),current_user: UserCreate = Depends(oauth2.get_current_user)):
+def delete_user(id: int, db: Session = Depends(get_db), current_user: UserCreate = Depends(oauth2.get_current_user)):
     user_query = db.query(models.User).filter(models.User.user_id == id)
     user = user_query.first()
     if user == None:
-        raise HTTPException(status_code = status.HTTP_404_NOT_FOUND,
-                            detail = f"User with id: {id} does not exist")
-    print (current_user.role_id)
-    if  current_user.role_id != None :
-        raise HTTPException(status_code = status.HTTP_403_FORBIDDEN,
-                            detail = "Not authorized to perform requested action")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"User with id: {id} does not exist")
+    print(current_user.role_id)
+    if current_user.role_id != None:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                            detail="Not authorized to perform requested action")
 
     user_query.delete(synchronize_session=False)
     db.commit()
@@ -66,10 +69,9 @@ def delete_user(id: int, db: Session = Depends(get_db),current_user: UserCreate 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-
-@router.put("/{id}", response_model= UserOut)
-def update_post(id: int, updated_user:UserUpdate, db: Session = Depends(get_db), current_user: UserCreate = Depends(oauth2.get_current_user)):
-
+@router.put("/{id}", response_model=UserOut)
+def update_post(id: int, updated_user: UserUpdate, db: Session = Depends(get_db),
+                current_user: UserCreate = Depends(oauth2.get_current_user)):
     user_query = db.query(models.User).filter(models.User.user_id == id)
     user = user_query.first()
 
@@ -77,13 +79,11 @@ def update_post(id: int, updated_user:UserUpdate, db: Session = Depends(get_db),
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"user with id: {id} does not exist")
     print(current_user.user_id)
-    if  current_user.role_id != None:
+    if current_user.role_id != None:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail="Not authorized to perform requested action")
 
-   
     update_values = {key: value for key, value in updated_user.dict().items() if value is not None}
-
 
     user_query.filter(models.User.user_id == id).update(update_values, synchronize_session=False)
     # user_query.update(updated_user.dict(), synchronize_session=False)
@@ -91,4 +91,3 @@ def update_post(id: int, updated_user:UserUpdate, db: Session = Depends(get_db),
     db.commit()
 
     return user_query.first()
-
