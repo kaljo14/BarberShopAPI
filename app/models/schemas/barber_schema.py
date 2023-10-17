@@ -1,6 +1,7 @@
 from pydantic import BaseModel, EmailStr,constr,validator
 from datetime import datetime
 from typing import Optional
+from .user_schema import UserOut
 
 from pydantic.types import conint
 
@@ -10,6 +11,7 @@ class BarberOut(BaseModel):
     specialization:Optional[str] = None
     location_id:Optional[int] = None
     bio:Optional[str] = None
+    user: UserOut
 
     class Config:
         orm_mode = True

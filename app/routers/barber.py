@@ -1,7 +1,9 @@
 from fastapi import FastAPI, Response, status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
 from ..models import models
+from ..models.schemas.user_schema import UserOut
 from ..models.schemas.barber_schema import *
+
 from ..security import utils
 from ..database.database  import get_db
 from typing import List
@@ -31,3 +33,12 @@ def create_user(barber: BarberCreate, db: Session = Depends(get_db)):
     db.refresh(new_barber)
 
     return new_barber
+
+@router.get('/', response_model=List[BarberOut])
+def get_user( db: Session = Depends(get_db), ):
+    barbers = db.query(models.Barber).all()
+    if not barbers:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"There are no barbers defined")
+
+    return barbers
