@@ -4,6 +4,7 @@ from ..models import models
 from ..models.schemas import schemas
 from ..security import utils
 from ..database.database  import get_db
+from typing import List
 
 router = APIRouter(
     prefix="/users",
@@ -29,6 +30,14 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
     return new_user
 
+@router.get('/', response_model=List[schemas.UserOut])
+def get_user( db: Session = Depends(get_db), ):
+    users = db.query(models.User).all()
+    if not users:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"There are no users defined")
+
+    return users
 
 @router.get('/{user_id}', response_model=schemas.UserOut)
 def get_user(user_id: int, db: Session = Depends(get_db), ):

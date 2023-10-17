@@ -24,9 +24,9 @@ def create_user(role: role_schema.RoleCreat, db: Session = Depends(get_db)):
 
 @router.get('/', response_model=List[role_schema.RoleOut])
 def get_user( db: Session = Depends(get_db), ):
-    role = db.query(models.Role).all()
-    if not role:
+    roles = db.query(models.Role).all()
+    if not roles:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"There are no roles defined")
 
-    return role
+    return roles
