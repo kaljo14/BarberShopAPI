@@ -1,8 +1,8 @@
 from fastapi import FastAPI, Response, status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
 from ..models import models
-from ..models.schemas import user_schema
-from ..security import utils
+from ..models.schemas.user_schema import *
+from ..security import utils,oauth2
 from ..database.database  import get_db
 from typing import List
 
@@ -15,8 +15,8 @@ router = APIRouter(
 # /users
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=user_schema.UserOut)
-def create_user(user: user_schema.UserCreate, db: Session = Depends(get_db)):
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=UserOut)
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
 
     # hash the password - user.password
     hashed_password = utils.hash(user.password)
@@ -30,7 +30,7 @@ def create_user(user: user_schema.UserCreate, db: Session = Depends(get_db)):
 
     return new_user
 
-@router.get('/', response_model=List[user_schema.UserOut])
+@router.get('/', response_model=List[UserOut])
 def get_user( db: Session = Depends(get_db), ):
     users = db.query(models.User).all()
     if not users:
@@ -39,7 +39,7 @@ def get_user( db: Session = Depends(get_db), ):
 
     return users
 
-@router.get('/{user_id}', response_model=user_schema.UserOut)
+@router.get('/{user_id}', response_model=UserOut)
 def get_user(user_id: int, db: Session = Depends(get_db), ):
     user = db.query(models.User).filter(models.User.user_id == user_id).first()
     if not user:
@@ -48,4 +48,47 @@ def get_user(user_id: int, db: Session = Depends(get_db), ):
 
     return user
 
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_user(id: int, db: Session = Depends(get_db),current_user: UserCreate = Depends(oauth2.get_current_user)):
+    user_query = db.query(models.User).filter(models.User.user_id == id)
+    user = user_query.first()
+    if user == None:
+        raise HTTPException(status_code = status.HTTP_404_NOT_FOUND,
+                            detail = f"User with id: {id} does not exist")
+    print (current_user.role_id)
+    if  current_user.role_id != None :
+        raise HTTPException(status_code = status.HTTP_403_FORBIDDEN,
+                            detail = "Not authorized to perform requested action")
+
+    user_query.delete(synchronize_session=False)
+    db.commit()
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+
+@router.put("/{id}", response_model= UserOut)
+def update_post(id: int, updated_user:UserUpdate, db: Session = Depends(get_db), current_user: UserCreate = Depends(oauth2.get_current_user)):
+
+    user_query = db.query(models.User).filter(models.User.user_id == id)
+    user = user_query.first()
+
+    if user == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"user with id: {id} does not exist")
+    print(current_user.user_id)
+    if  current_user.role_id != None:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                            detail="Not authorized to perform requested action")
+
+   
+    update_values = {key: value for key, value in updated_user.dict().items() if value is not None}
+
+
+    user_query.filter(models.User.user_id == id).update(update_values, synchronize_session=False)
+    # user_query.update(updated_user.dict(), synchronize_session=False)
+
+    db.commit()
+
+    return user_query.first()
 

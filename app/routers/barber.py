@@ -73,7 +73,7 @@ def delete_barber(id: int, db: Session = Depends(get_db),current_user: UserCreat
 
 
 @router.put("/{id}", response_model=BarberOut)
-def update_post(id: int, updated_post:BarberUpdate, db: Session = Depends(get_db), current_user: UserCreate = Depends(oauth2.get_current_user)):
+def update_post(id: int, updated_barber:BarberUpdate, db: Session = Depends(get_db), current_user: UserCreate = Depends(oauth2.get_current_user)):
 
     barber_query = db.query(models.Barber).filter(models.Barber.barber_id == id)
     barber = barber_query.first()
@@ -86,7 +86,7 @@ def update_post(id: int, updated_post:BarberUpdate, db: Session = Depends(get_db
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail="Not authorized to perform requested action")
 
-    barber_query.update(updated_post.dict(), synchronize_session=False)
+    barber_query.update(updated_barber.dict(), synchronize_session=False)
 
     db.commit()
 
