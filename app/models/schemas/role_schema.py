@@ -13,7 +13,7 @@ class RoleOut(BaseModel):
         orm_mode = True
 
 
-class RoleCreat(BaseModel):
+class RoleCreate(BaseModel):
     role_name: str
 
     class Config:

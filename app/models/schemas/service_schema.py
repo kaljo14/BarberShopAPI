@@ -4,13 +4,13 @@ from typing import Optional
 from decimal import Decimal
 from pydantic.types import conint
 
-class ServiceCreat(BaseModel):
+class ServiceCreate(BaseModel):
     name: str
     duration: int
     price: Decimal
     location_id: int
 
-class ServiceOut(ServiceCreat):
+class ServiceOut(ServiceCreate):
     service_id: int
     
     class Config:

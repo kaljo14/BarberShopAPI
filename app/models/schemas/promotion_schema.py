@@ -3,7 +3,7 @@ from datetime import date
 from decimal import Decimal
 from typing import Optional
 
-class PromotionsCreate(BaseModel):
+class PromotionCreate(BaseModel):
     name: str
     description: str
     start_date: date
@@ -11,6 +11,6 @@ class PromotionsCreate(BaseModel):
     discount_type: Optional[str] = None
     discount_value: Decimal
 
-class PromotionsOut(PromotionsCreate):
+class PromotionOut(PromotionCreate):
     promotion_id: int
   

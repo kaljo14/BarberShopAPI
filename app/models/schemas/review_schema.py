@@ -6,14 +6,14 @@ from .barber_schema import BarberOut
 from .service_schema import ServiceOut
 from .location_schema import LocationOut
 
-class ReviewsCreate(BaseModel):
+class ReviewCreate(BaseModel):
     user_id: int
     barber_id: int
     rating: int
     review_text: Optional[str] = None
     created_at: datetime
 
-class ReviewsOut(BaseModel):
+class ReviewOut(BaseModel):
     review_id: int
     user_id: UserOut
     barber_id: BarberOut
