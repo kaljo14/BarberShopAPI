@@ -13,4 +13,7 @@ class PromotionCreate(BaseModel):
 
 class PromotionOut(PromotionCreate):
     promotion_id: int
+
+    class Config:
+        orm_mode = True
   

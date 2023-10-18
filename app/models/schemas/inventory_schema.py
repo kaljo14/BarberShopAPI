@@ -10,3 +10,5 @@ class InventoryCreate(BaseModel):
 class InventoryOut(InventoryCreate):
     inventory_id: int
     
+    class Config:
+        orm_mode = True

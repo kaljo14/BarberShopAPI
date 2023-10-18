@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey,DateTime,Text,DECIMAL,Date
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey,DateTime,Text,DECIMAL,Date,Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
@@ -77,6 +77,12 @@ class Inventory(Base):
 
     location = relationship("Location")
 
+appointment_timeslot_association = Table(
+    'appointment_timeslot_association',
+    Base.metadata,
+    Column('appointment_id', Integer, ForeignKey('appointments.appointment_id')),
+    Column('time_slot_id', Integer, ForeignKey('timeSlots.slot_id'))
+)
 class Appointment(Base):
     __tablename__ = 'appointments'
 
@@ -93,6 +99,7 @@ class Appointment(Base):
     barber = relationship("Barber")
     service = relationship("Service")
     location = relationship("Location")
+    time_slots = relationship('TimeSlot', secondary=appointment_timeslot_association, back_populates='appointments')
 
 class Review(Base):
     __tablename__ = 'reviews'
@@ -115,7 +122,7 @@ class Promotion(Base):
     description = Column(Text)
     start_date = Column(Date)
     end_date = Column(Date)
-    discount_type = Column(String(20))
+    discount_type = Column(String(50))
     discount_value = Column(DECIMAL(10, 2))
 
 class Payment(Base):
@@ -140,6 +147,11 @@ class TimeSlot(Base):
     barber_id = Column(Integer, ForeignKey('barbers.barber_id'))
     start_time  = Column(TIMESTAMP)
     end_time  = Column(TIMESTAMP)
+
     availability = Column(Boolean, default=True) 
     
     barbers = relationship("Barber")
+
+    appointments = relationship('Appointment', secondary=appointment_timeslot_association, back_populates='time_slots')
+
+

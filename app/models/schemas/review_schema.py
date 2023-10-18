@@ -20,3 +20,5 @@ class ReviewOut(BaseModel):
     rating: int
     review_text: Optional[str] = None
     created_at: datetime
+    class Config:
+        orm_mode = True
