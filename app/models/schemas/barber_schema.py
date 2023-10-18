@@ -5,6 +5,10 @@ from .user_schema import UserOut
 
 from pydantic.types import conint
 
+class BarberID(BaseModel):
+    barber_id:int
+    user_id:int
+
 class BarberOut(BaseModel):
     barber_id:int
     user_id:int

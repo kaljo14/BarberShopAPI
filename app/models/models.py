@@ -138,7 +138,8 @@ class TimeSlot(Base):
 
     slot_id = Column(Integer, primary_key=True, autoincrement=True)
     barber_id = Column(Integer, ForeignKey('barbers.barber_id'))
-    slot_time = Column(TIMESTAMP)
-    availability = Column(String(20))
+    start_time  = Column(TIMESTAMP)
+    end_time  = Column(TIMESTAMP)
+    availability = Column(Boolean, default=True) 
     
     barbers = relationship("Barber")
