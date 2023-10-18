@@ -4,17 +4,6 @@ from typing import Optional
 
 from pydantic.types import conint
 
-class LocationOut(BaseModel):
-    location_id: int
-    name:Optional[str] = None
-    address:Optional[str] = None
-    phone:Optional[str] = None
-    opening_hours:Optional[str] = None
-    coordinates:Optional[str] = None
-    
-    class Config:
-        orm_mode = True
-
 class LocationCreat(BaseModel):
     name:Optional[str] = None
     address:Optional[str] = None
@@ -22,5 +11,9 @@ class LocationCreat(BaseModel):
     opening_hours:Optional[str] = None
     coordinates:Optional[str] = None
 
+class LocationOut(LocationCreat):
+    location_id: int
+
     class Config:
         orm_mode = True
+

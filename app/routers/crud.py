@@ -62,7 +62,7 @@ def create_crud_router(base_path: str, out_schema, create_schema, update_schema,
                                 detail="Not authorized to perform requested action")
 
         update_values = {key: value for key, value in updated_item.dict().items() if value is not None}
-        db.query(model).filter(model.id == item_id).update(update_values, synchronize_session=False)
+        db.query(model).filter(getattr(model, id_column) == item_id).update(update_values, synchronize_session=False)
         db.commit()
 
         return item
