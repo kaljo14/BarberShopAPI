@@ -18,10 +18,10 @@ class AppointmentsCreate(BaseModel):
 
 class AppointmentsOut(BaseModel):
     appointment_id: int
-    user_id: UserOut
-    barber_id: BarberOut
-    service_id: ServiceOut
-    location_id: LocationOut
+    user_id: int
+    barber_id: int
+    service_id: int
+    location_id: int
     appointment_time: datetime
     status: Optional[str] = None
     special_request:Optional[str] = None

@@ -3,10 +3,12 @@ from sqlalchemy.orm import Session
 from ..models import models
 from ..models.schemas.user_schema import *
 from ..models.schemas.time_slot_schema import *
+from ..models.schemas.appointment_schema import *
 from ..time_manager.utils import *
 from ..security import utils, oauth2
 from ..database.database import get_db
 from typing import List
+from ..models import models
 
 router = APIRouter(
     prefix="/book_time_slot",
@@ -37,3 +39,15 @@ def book_time_slot(time_slots:List[TimeSlotID], db: Session = Depends(get_db),
     db.commit()
 
     return time_slots
+
+
+@router.post("/appp", status_code=status.HTTP_201_CREATED, response_model=AppointmentsOut)
+def book_time_slot(appointment:AppointmentsCreate, db: Session = Depends(get_db),
+                  current_user: UserCreate = Depends(oauth2.get_current_user)):
+    
+    new_item = models.Appointment(**appointment.dict())
+    db.add(new_item)
+    db.commit()
+    db.refresh(new_item)
+    
+    return new_item
