@@ -25,7 +25,7 @@ class UserCreate(BaseModel):
     role_id: Optional[int] = None
 
     @validator("phone_number")
-    def validate_phone_number(self, phone_number):
+    def validate_phone_number(phone_number):
         # Check if the phone number contains only numeric characters
         if not phone_number.isdigit():
             raise ValueError("Phone number must contain only numeric characters")
@@ -44,7 +44,7 @@ class UserUpdate(BaseModel):
     phone_number: Optional[constr(min_length=10, max_length=12)] = None
 
     @validator("phone_number")
-    def validate_phone_number(self, phone_number):
+    def validate_phone_number( phone_number):
         # Check if the phone number contains only numeric characters
         if not phone_number.isdigit():
             raise ValueError("Phone number must contain only numeric characters")
