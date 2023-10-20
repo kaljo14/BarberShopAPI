@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey,DateTime,Text,DECIMAL,Date,Table
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey,DateTime,Text,DECIMAL,Date,Table,Time
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
@@ -34,7 +34,8 @@ class Location(Base):
     name = Column(String(50))
     address = Column(String(255))
     phone = Column(String(15))
-    opening_hours = Column(String(50))
+    start_time = Column(String(50))
+    end_time = Column(String(50))
     coordinates = Column(String(50))
 
 
@@ -147,11 +148,14 @@ class TimeSlot(Base):
     barber_id = Column(Integer, ForeignKey('barbers.barber_id'))
     start_time  = Column(TIMESTAMP)
     end_time  = Column(TIMESTAMP)
-
     availability = Column(Boolean, default=True) 
     
     barbers = relationship("Barber")
 
     appointments = relationship('Appointment', secondary=appointment_timeslot_association, back_populates='time_slots')
+
+    def update_availability(self, new_availability):
+        self.availability = new_availability
+
 
 
