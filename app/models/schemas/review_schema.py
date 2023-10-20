@@ -1,10 +1,11 @@
-from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
-from .user_schema import UserOut
+
+from pydantic import BaseModel
+
 from .barber_schema import BarberOut
-from .service_schema import ServiceOut
-from .location_schema import LocationOut
+from .user_schema import UserOut
+
 
 class ReviewCreate(BaseModel):
     user_id: int
@@ -13,6 +14,7 @@ class ReviewCreate(BaseModel):
     review_text: Optional[str] = None
     created_at: datetime
 
+
 class ReviewOut(BaseModel):
     review_id: int
     user_id: UserOut
@@ -20,5 +22,6 @@ class ReviewOut(BaseModel):
     rating: int
     review_text: Optional[str] = None
     created_at: datetime
+
     class Config:
         orm_mode = True
