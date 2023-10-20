@@ -20,3 +20,8 @@ class TimeSlotOut(BaseModel):
 class TimeSlotID(BaseModel):
     slot_id: int
     barber_id: int
+    
+    class Config:
+        orm_mode = True
+
+    

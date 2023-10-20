@@ -84,6 +84,7 @@ appointment_timeslot_association = Table(
     Column('appointment_id', Integer, ForeignKey('appointments.appointment_id')),
     Column('time_slot_id', Integer, ForeignKey('timeSlots.slot_id'))
 )
+
 class Appointment(Base):
     __tablename__ = 'appointments'
 

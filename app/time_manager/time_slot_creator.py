@@ -32,12 +32,12 @@ def generate_and_insert_time_slots(num_days: int):
                     time_slot = models.TimeSlot(barber_id=id, start_time=current_time, end_time=end_slot, availability=True)
                     db.add(time_slot)
                     current_time = end_slot
-                    total_time_slots += 1
+                 
 
             # Move to the next day
             current_date += timedelta(days=1)
         db.commit()
-        return total_time_slots 
+        
     except Exception as e:
         print(f"Error: {e}")
         db.rollback()
@@ -45,5 +45,6 @@ def generate_and_insert_time_slots(num_days: int):
         db.close()
 
 
-def book_time_slot():
+def book_time_slot(TimeSlotID):
+
     return

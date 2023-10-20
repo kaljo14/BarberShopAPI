@@ -27,9 +27,9 @@ def get_working_hours(location_id: int):
 
 def get_consecutive_time_slots( barber_id: int, date: datetime, number_of_timeslots: int):
     # Calculate the start and end times for the given date
-
+    working_hours=get_working_hours(1)
     db = SessionLocal()
-    start_time = datetime(date.year, date.month, date.day, 10, 0, 0)  # Assuming 10:00 AM is the start time
+    start_time = datetime(date.year, date.month, date.day, 7, 0, 0)  # Assuming 10:00 AM is the start time
     end_time = datetime(date.year, date.month, date.day, 18, 0, 0)   # Assuming 6:00 PM is the end time
 
     # Retrieve available time slots for the given barber on the specified date
