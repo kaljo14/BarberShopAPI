@@ -1,11 +1,13 @@
 # from ..models import models
+from datetime import timedelta
+
 from .utils import *
 from ..database.database import SessionLocal
 from ..models import models
 
 
-def generate_and_insert_time_slots(num_days: int):
-    db = SessionLocal()
+def generate_and_insert_time_slots(num_days: int, db: SessionLocal()):
+    # db = SessionLocal()
     time_slots = []
     barbers = get_all_barbers(1)
     # working_hours =['10:00:00','18:00:00']

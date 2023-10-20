@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from ..database.database import get_db
 from ..models import models
 from ..models.schemas.appointment_schema import *
+from ..models.schemas.time_slot_schema import TimeSlotID
 from ..models.schemas.user_schema import *
 from ..security import oauth2
 from ..time_manager.utils import *

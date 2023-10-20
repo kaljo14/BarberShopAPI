@@ -52,11 +52,28 @@ def test_user(client):
     new_user = res.json()
     new_user['password'] = user_data['password']
     return new_user
+@pytest.fixture
+def test_user2(client):
+    user_data = {"email": "hello23@gmail.com", "password": "password123","phone_number":"088901123123","first_name": "string","last_name": "string"}
+    res = client.post("/users/", json=user_data)
 
+    assert res.status_code == 201
+
+    new_user = res.json()
+    new_user['password'] = user_data['password']
+    return new_user
 
 @pytest.fixture
 def test_barber(authorized_client):
     barber_data ={"user_id": 1}
+    res = authorized_client.post("/barbers/", json=barber_data)
+
+    assert res.status_code == 201
+    barber_data =res.json()
+    return barber_data
+@pytest.fixture
+def test_barber2(authorized_client):
+    barber_data ={"user_id": 2}
     res = authorized_client.post("/barbers/", json=barber_data)
 
     assert res.status_code == 201

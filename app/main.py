@@ -30,7 +30,7 @@ app.include_router(book_time_slot.router)
 
 include_routers_dynamically(app)
 date = datetime(2023, 10, 20)
-generate_and_insert_time_slots(settings.days_ahead_time_slots_generator)
+# generate_and_insert_time_slots(settings.days_ahead_time_slots_generator,)
 
 
 # x = get_consecutive_time_slots( 1,date,3)
