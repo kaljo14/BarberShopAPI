@@ -1,15 +1,13 @@
-from ..models.schemas.barber_schema import BarberCreate, BarberUpdate, BarberOut
-from ..models.schemas.role_schema import RoleOut, RoleCreate
-from ..models.schemas.user_schema import UserCreate, UserUpdate, UserOut
-from ..models.schemas.location_schema import *
-from ..models.schemas.service_schema import *
-from ..models.schemas.inventory_schema import *
-from ..models.schemas.appointment_schema import *
-from ..models.schemas.review_schema import *
-from ..models.schemas.promotion_schema import *
-from ..models.schemas.time_slot_schema import *
 from ..models import models
-
+from ..models.schemas.appointment_schema import *
+from ..models.schemas.barber_schema import BarberCreate, BarberUpdate
+from ..models.schemas.inventory_schema import *
+from ..models.schemas.location_schema import *
+from ..models.schemas.promotion_schema import *
+from ..models.schemas.review_schema import *
+from ..models.schemas.role_schema import RoleOut, RoleCreate
+from ..models.schemas.service_schema import *
+from ..models.schemas.time_slot_schema import *
 
 router_configs = [
     ("barbers", BarberOut, BarberCreate, BarberUpdate, models.Barber, "barber_id"),

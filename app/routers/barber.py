@@ -18,12 +18,12 @@ router = APIRouter(
 def create_barber(barber: BarberCreate, db: Session = Depends(get_db),
                   current_user: UserCreate = Depends(oauth2.get_current_user)):
     user_check = db.query(models.User).filter(models.User.user_id == barber.user_id).first()
-    if user_check == None:
+    if user_check is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"There is no user with id:{barber.user_id}")
 
     barber_existing = db.query(models.Barber).filter(models.Barber.user_id == barber.user_id).first()
 
-    if barber_existing != None:
+    if barber_existing is not None:
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
                             detail=f"The user with id :{barber.user_id}is already registered as a barber")
 
@@ -59,11 +59,11 @@ def get_barber(id: int, db: Session = Depends(get_db), current_user: UserCreate 
 def delete_barber(id: int, db: Session = Depends(get_db), current_user: UserCreate = Depends(oauth2.get_current_user)):
     barber_query = db.query(models.Barber).filter(models.Barber.barber_id == id)
     barber = barber_query.first()
-    if barber == None:
+    if barber is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Barber with id: {id} does not exist")
     print(current_user.role_id)
-    if current_user.role_id != None:
+    if current_user.role_id is not None:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail="Not authorized to perform requested action")
 
@@ -79,11 +79,11 @@ def update_post(id: int, updated_barber: BarberUpdate, db: Session = Depends(get
     barber_query = db.query(models.Barber).filter(models.Barber.barber_id == id)
     barber = barber_query.first()
 
-    if barber == None:
+    if barber is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Barber with id: {id} does not exist")
 
-    if current_user.role_id != None:
+    if current_user.role_id is not None:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail="Not authorized to perform requested action")
 
