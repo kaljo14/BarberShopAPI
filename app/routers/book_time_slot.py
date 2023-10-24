@@ -41,13 +41,39 @@ def book_time_slot(time_slots:List[TimeSlotID], db: Session = Depends(get_db),
     return time_slots
 
 
-@router.post("/appp", status_code=status.HTTP_201_CREATED, response_model=AppointmentsOut)
-def book_time_slot(appointment:AppointmentsCreate, db: Session = Depends(get_db),
+@router.post("/appointments", status_code=status.HTTP_201_CREATED)
+def book_time_slot_and_appointment(appointment:AppointmentsBooking, db: Session = Depends(get_db),
                   current_user: UserCreate = Depends(oauth2.get_current_user)):
     
-    new_item = models.Appointment(**appointment.dict())
-    db.add(new_item)
-    db.commit()
-    db.refresh(new_item)
+    user = db.query(models.User).filter_by(user_id=appointment.user_id).first()
+    service = db.query(models.Service).filter_by(service_id=appointment.service_id).first()
+    location = db.query(models.Location).filter_by(location_id=appointment.location_id).first()
+    barber = db.query(models.Barber).filter_by(barber_id=appointment.barber_id).first()
+    appointment1 = models.Appointment(
+    user=user,
+    service=service,
+    barber=barber,
+    location=location,
+    appointment_time=datetime.now(),  # Set the appointment time as needed
+    status='Scheduled')
     
-    return new_item
+
+    # time_slots_data = data.get('timeSlots', [])
+    time_slots_data = appointment.time_slots
+    
+    time_slots = []
+
+    for slot_data in time_slots_data:
+        slot_id = slot_data.slot_id
+        time_slot = db.query(models.TimeSlot).filter_by(slot_id=slot_id).first()
+        if time_slot:
+            appointment1.time_slots.append(time_slot)
+
+    
+    appointment.time_slots = time_slots
+
+    db.add(appointment1)
+    db.commit()
+    db.refresh(appointment1)
+    
+    return appointment1
