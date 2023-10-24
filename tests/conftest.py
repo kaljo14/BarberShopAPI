@@ -1,16 +1,13 @@
-from fastapi.testclient import TestClient
 import pytest
+from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from app.main import app
 
 from app.config.env_variables_config import settings
-from app.database.database import get_db
 from app.database.database import Base
-from alembic import command
+from app.database.database import get_db
+from app.main import app
 from app.security.oauth2 import create_access_token
-
 
 # SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:password123@localhost:5432/fastapi_test'
 SQLALCHEMY_DATABASE_URL = f'postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}_test'
@@ -55,11 +52,28 @@ def test_user(client):
     new_user = res.json()
     new_user['password'] = user_data['password']
     return new_user
+@pytest.fixture
+def test_user2(client):
+    user_data = {"email": "hello23@gmail.com", "password": "password123","phone_number":"088901123123","first_name": "string","last_name": "string"}
+    res = client.post("/users/", json=user_data)
 
+    assert res.status_code == 201
+
+    new_user = res.json()
+    new_user['password'] = user_data['password']
+    return new_user
 
 @pytest.fixture
 def test_barber(authorized_client):
     barber_data ={"user_id": 1}
+    res = authorized_client.post("/barbers/", json=barber_data)
+
+    assert res.status_code == 201
+    barber_data =res.json()
+    return barber_data
+@pytest.fixture
+def test_barber2(authorized_client):
+    barber_data ={"user_id": 2}
     res = authorized_client.post("/barbers/", json=barber_data)
 
     assert res.status_code == 201

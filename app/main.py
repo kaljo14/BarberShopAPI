@@ -1,18 +1,14 @@
+from datetime import datetime
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .time_manager.time_slot_creator import generate_and_insert_time_slots
-from .time_manager.utils import *
-from .routers.crud import create_crud_router
-from .models import models
-from .database.database import engine
-from .routers import user, auth ,book_time_slot
 from .config.env_variables_config import settings
-
+from .database.database import engine
+from .models import models
+from .routers import user, auth, book_time_slot
 from .routers.router_manager import include_routers_dynamically
-
-
-from datetime import datetime
+from .time_manager.time_slot_creator import generate_and_insert_time_slots
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -32,10 +28,11 @@ app.include_router(user.router)
 app.include_router(auth.router)
 app.include_router(book_time_slot.router)
 
-
 include_routers_dynamically(app)
-date = datetime(2023, 10, 20) 
-generate_and_insert_time_slots(settings.days_ahead_time_slots_generator)
+date = datetime(2023, 10, 20)
+# generate_and_insert_time_slots(settings.days_ahead_time_slots_generator,)
+
+
 # x = get_consecutive_time_slots( 1,date,3)
 # print (x)
 # get_working_hours(1)

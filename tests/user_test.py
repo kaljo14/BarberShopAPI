@@ -4,14 +4,15 @@ from app.models.schemas import user_schema
 
 from app.config.env_variables_config import settings
 
+
 def test_create_user(client):
     res = client.post(
-        "/users/", json={"email": "hello123@gmail.com", "password": "password123","phone_number":"08890123123","first_name": "string","last_name": "string"})
+        "/users/", json={"email": "hello123@gmail.com", "password": "password123", "phone_number": "08890123123",
+                         "first_name": "string", "last_name": "string"})
 
     new_user = user_schema.UserOut(**res.json())
     assert new_user.email == "hello123@gmail.com"
     assert res.status_code == 201
-
 
 
 def test_login_user(test_user, client):
@@ -33,7 +34,6 @@ def test_login_user(test_user, client):
     (None, 'password123', 422),
     ('sanjeev@gmail.com', None, 422)
 ])
-
 def test_incorrect_login(test_user, client, email, password, status_code):
     res = client.post(
         "/login", data={"username": email, "password": password})
@@ -45,6 +45,7 @@ def test_update_user_invalid_id(authorized_client):
     res = authorized_client.put("/users/999", json={"email": "new_email@example.com"})
     assert res.status_code == 404
 
+
 # def test_update_user_invalid_email(authorized_client, test_user):
 #     res = authorized_client.put(
 #         f"/users/{test_user['user_id']}",
@@ -54,7 +55,8 @@ def test_update_user_invalid_id(authorized_client):
 
 def test_delete_user(authorized_client):
     res = authorized_client.delete("/users/1")
-    assert res.status_code == 204 
+    assert res.status_code == 204
+
 
 def test_delete_user_invalid_id(authorized_client):
     res = authorized_client.delete("/users/999")
@@ -63,4 +65,4 @@ def test_delete_user_invalid_id(authorized_client):
 # # Test case for deleting a user with insufficient permissions
 # def test_delete_user_insufficient_permissions(client, test_user):
 #     res = client.delete(f"/users/{test_user['user_id']}")
-#     assert res.status_code == 403 
+#     assert res.status_code == 403

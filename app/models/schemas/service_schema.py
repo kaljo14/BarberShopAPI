@@ -1,8 +1,7 @@
-from pydantic import BaseModel, EmailStr, constr, validator
-from datetime import datetime
-from typing import Optional
 from decimal import Decimal
-from pydantic.types import conint
+
+from pydantic import BaseModel
+
 
 class ServiceCreate(BaseModel):
     name: str
@@ -10,10 +9,9 @@ class ServiceCreate(BaseModel):
     price: Decimal
     location_id: int
 
+
 class ServiceOut(ServiceCreate):
     service_id: int
-    
+
     class Config:
         orm_mode = True
-
-

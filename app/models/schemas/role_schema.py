@@ -1,8 +1,4 @@
-from pydantic import BaseModel, EmailStr, constr, validator
-from datetime import datetime
-from typing import Optional
-
-from pydantic.types import conint
+from pydantic import BaseModel
 
 
 class RoleOut(BaseModel):

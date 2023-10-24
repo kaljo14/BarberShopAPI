@@ -1,10 +1,7 @@
-from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional,List
-from .user_schema import UserOut
-from .barber_schema import BarberOut
-from .service_schema import ServiceOut
-from .location_schema import LocationOut
+
+from pydantic import BaseModel
 
 
 class AppointmentsCreate(BaseModel):
@@ -16,6 +13,7 @@ class AppointmentsCreate(BaseModel):
     status: str
     special_request: str
 
+
 class AppointmentsOut(BaseModel):
     appointment_id: int
     user_id: int
@@ -24,7 +22,7 @@ class AppointmentsOut(BaseModel):
     location_id: int
     appointment_time: datetime
     status: Optional[str] = None
-    special_request:Optional[str] = None
+    special_request: Optional[str] = None
 
     class Config:
         orm_mode = True

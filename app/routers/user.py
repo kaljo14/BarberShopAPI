@@ -18,8 +18,6 @@ router = APIRouter(
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=UserOut)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    
-    
     hashed_password = utils.hash(user.password)
     user.password = hashed_password
 
@@ -56,11 +54,11 @@ def get_user(user_id: int, db: Session = Depends(get_db), ):
 def delete_user(id: int, db: Session = Depends(get_db), current_user: UserCreate = Depends(oauth2.get_current_user)):
     user_query = db.query(models.User).filter(models.User.user_id == id)
     user = user_query.first()
-    if user == None:
+    if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"User with id: {id} does not exist")
     print(current_user.role_id)
-    if current_user.role_id != None:
+    if current_user.role_id is not None:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail="Not authorized to perform requested action")
 
@@ -80,7 +78,7 @@ def update_post(id: int, updated_user: UserUpdate, db: Session = Depends(get_db)
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"user with id: {id} does not exist")
     print(current_user.user_id)
-    if current_user.role_id != None:
+    if current_user.role_id is not None:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail="Not authorized to perform requested action")
 
