@@ -51,7 +51,7 @@ def book_time_slot_and_appointment(appointment:AppointmentsBooking, db: Session 
     service = db.query(models.Service).filter_by(service_id=appointment.service_id).first()
     location = db.query(models.Location).filter_by(location_id=appointment.location_id).first()
     barber = db.query(models.Barber).filter_by(barber_id=appointment.barber_id).first()
-    appointment1 = models.Appointment(
+    created_appointment = models.Appointment(
     user=user,
     service=service,
     barber=barber,
@@ -67,15 +67,15 @@ def book_time_slot_and_appointment(appointment:AppointmentsBooking, db: Session 
 
     for slot_data in time_slots_data:
         slot_id = slot_data.slot_id
-        time_slot = db.query(models.TimeSlot).filter_by(slot_id=slot_id).first()
+        time_slot = db.query(models.TimeSlot).filter_by(slot_id=slot_id).filter(models.TimeSlot.availability == True).first()
         if time_slot:
-            appointment1.time_slots.append(time_slot)
+            created_appointment.time_slots.append(time_slot)
 
     
     appointment.time_slots = time_slots
 
-    db.add(appointment1)
+    db.add(created_appointment)
     db.commit()
-    db.refresh(appointment1)
+    db.refresh(created_appointment)
     
-    return appointment1
+    return created_appointment
