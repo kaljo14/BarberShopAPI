@@ -15,7 +15,7 @@ router_configs = [
     ("location", LocationOut, LocationCreate, LocationCreate, models.Location, "location_id"),
     ("services", ServiceOut, ServiceCreate, ServiceCreate, models.Service, "service_id"),
     ("inventory", InventoryOut, InventoryCreate, InventoryCreate, models.Inventory, "inventory_id"),
-    ("appointments", AppointmentsOut, AppointmentsCreate, AppointmentsCreate, models.Appointment, "appointments_id"),
+    ("appointments", AppointmentsOut, AppointmentsCreate, AppointmentsCreate, models.Appointment, "appointment_id"),
     ("review", ReviewOut, ReviewCreate, ReviewCreate, models.Review, "review_id"),
     ("promotion", PromotionOut, PromotionCreate, PromotionCreate, models.Promotion, "promotion_id"),
     ("timeSlot", TimeSlotOut, TimeSlotCreate, TimeSlotCreate, models.TimeSlot, "slot_id"),
