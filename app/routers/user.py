@@ -19,11 +19,18 @@ router = APIRouter(
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=UserOut)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    existing_user = db.query(models.User).filter_by(phone_number=models.User.phone_number).first()
+    # existing_user = db.query(models.User).filter_by(phone_number=models.User.phone_number).first()
+    existing_user = db.query(models.User).filter(models.User.phone_number == user.phone_number).first()
     if existing_user:
          raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail="A user with this phone number already exists.")
     
+    existing_user_by_email = db.query(models.User).filter(models.User.email == user.email).first()
+    if existing_user_by_email:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="A user with this email already exists."
+        )
     hashed_password = utils.hash(user.password)
     user.password = hashed_password
 
