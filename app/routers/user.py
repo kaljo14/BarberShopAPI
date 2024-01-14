@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Response, status, HTTPException, Depends, APIRouter
+from psycopg2 import IntegrityError
 from sqlalchemy.orm import Session
 from ..models import models
 from ..models.schemas.user_schema import *
@@ -18,13 +19,26 @@ router = APIRouter(
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=UserOut)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    existing_user = db.query(models.User).filter_by(phone_number=models.User.phone_number).first()
+    if existing_user:
+         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="A user with this phone number already exists.")
+    
     hashed_password = utils.hash(user.password)
     user.password = hashed_password
 
     new_user = models.User(**user.dict())
     print(new_user)
     db.add(new_user)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        # Handle other potential integrity issues
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail="There was a problem with creating the user.")
+
+    # Refresh to get the new user data from the database
     db.refresh(new_user)
 
     return new_user
